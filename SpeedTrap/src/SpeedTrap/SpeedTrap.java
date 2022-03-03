@@ -58,24 +58,32 @@ public class SpeedTrap09 {
         switch (WarnLevel) {
             case "Warning":
                 DemeritPoints = 0;
+                break;
             case "Minimum":
                 DemeritPoints = 3;
+                break;
             case "Maximum":
                 DemeritPoints = 4;
+                break;
             case "Severe":
                 DemeritPoints = 4;
+                break;
 
         }
 
         switch (WarnLevel) {
             case "Warning":
                 Fine = 0.00;
+                break;
             case "Minimum":
                 Fine = 250.00;
+                break;
             case "Maximum":
                 Fine = 500.00;
+                break;
             case "Severe":
                 Fine = 1000.00;
+                break;
 
         }
 
