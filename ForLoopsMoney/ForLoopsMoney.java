@@ -16,7 +16,7 @@ public class ForLoopsMoney
     public static void main(String[] args) 
     
     {
-        for (int i = 0; i <= 31; i ++) {
+        for (int i = 1; i <= 31; i ++) {
             MoneyAmount = MoneyAmount * 2;
             System.out.println("Day: " + i + " Money amount: " + money.format(MoneyAmount));
         
