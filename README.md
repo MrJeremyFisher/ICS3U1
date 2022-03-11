@@ -1,1 +1,1 @@
-						Projects for my Grade 11 computer science course.
+Projects for my Grade 11 computer science course.
