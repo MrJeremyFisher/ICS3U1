@@ -14,7 +14,13 @@ import javax.swing.border.EtchedBorder;
 
 public class GUITutorial {
 
+    // Super vars
+    public static Border loweredetched = BorderFactory.createEtchedBorder(EtchedBorder.LOWERED);
+    public static int LbLSX = 300;
+    public static int LbLSY = 200;
+    // Part 1 vars
     public static JFrame Frame;
+    public static JFrame Frame2;
     public static JPanel LabelSection;
     public static JPanel ButtonSection;
     public static JPanel TBoxSection;
@@ -26,12 +32,27 @@ public class GUITutorial {
     public static JButton TFieldChange;
     public static JTextField TField;
 
-    public static int LbLSX = 300;
-    public static int LbLSY = 200;
+    // Part 2 vars
+    public static JPanel RadBoxSection;
+    public static JPanel CoBoxSection;
+    public static JPanel CBoxSection;
+    public static JRadioButton RadS;
+    public static JRadioButton RadM;
+    public static JRadioButton RadL;
+    public static JLabel SLabel;
+    public static JLabel SizeLabel;
+    public static JLabel AmountLabel;
+    public static JLabel CheckLabel;
+    public static JComboBox SizeSelect;
+    public static JComboBox AmountSelect;
+    public static JCheckBox CheckS;
+    public static JCheckBox CheckM;
+    public static JCheckBox CheckL;
+    public static String[] Sizes = {"Small", "Medium", "Large"};
+    public static String[] Amount = {"1", "2", "3", "4", "5", "6", "7", "8", "9", "10"};
 
-    public static void main(String[] args) {
+    public static void Frame1(String[] args) {
 
-        Border loweredetched = BorderFactory.createEtchedBorder(EtchedBorder.LOWERED);
         // Frame stuff
         Frame = new JFrame("GUI");
         Frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
@@ -106,6 +127,7 @@ public class GUITutorial {
             String TextFieldContent = TField.getText();
             CLabel.setText(TextFieldContent);
         });
+
         // Frame stuff
         Frame.add(LabelSection);
         Frame.add(ButtonSection);
@@ -113,6 +135,173 @@ public class GUITutorial {
         Frame.setSize(LbLSX + 25, 750);
         Frame.setLayout(null);
         Frame.setVisible(true);
+
+    }
+
+    public static void Frame2(String[] args) {
+
+        // Frame stuff
+        Frame2 = new JFrame("GUI 2");
+        Frame2.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+
+        // Rad button container
+        RadBoxSection = new JPanel();
+        RadBoxSection.setLayout(null);
+        RadBoxSection.setBounds(5, 10, 400, LbLSY);
+        RadBoxSection.setBorder(BorderFactory.createTitledBorder(loweredetched, "Radio boxes"));
+        /*
+        * This doesnt work exactly as I'd like it to, but who cares
+         */
+        // Set up radio button 1
+        RadS = new JRadioButton("Small");
+        RadS.setBounds(40, 25, 220, 25);
+        RadBoxSection.add(RadS);
+        // Rad1 Action listener
+        RadS.addActionListener((ActionEvent e) -> {
+            SLabel.setText("Size: small"); // I know that hardcoding these is bad practice but I do not care
+        });
+        // Set up radio button 2
+        RadM = new JRadioButton("Medium");
+        RadM.setBounds(40, 50, 220, 25);
+        RadBoxSection.add(RadM);
+        // Rad1 Action listener
+        RadM.addActionListener((ActionEvent e) -> {
+            SLabel.setText("Size: medium");
+        });
+        // Set up radio button 3
+        RadL = new JRadioButton("Large");
+        RadL.setBounds(40, 75, 220, 25);
+        RadBoxSection.add(RadL);
+        // Rad1 Action listener
+        RadL.addActionListener((ActionEvent e) -> {
+            SLabel.setText("Size: large");
+        });
+        // Set up size label
+        SLabel = new JLabel("Size: ");
+        SLabel.setBounds(40, 100, 220, 25);
+        RadBoxSection.add(SLabel);
+        // Set up combo box container
+        CoBoxSection = new JPanel();
+        CoBoxSection.setLayout(null);
+        CoBoxSection.setBounds(5, 240, 400, LbLSY);
+        CoBoxSection.setBorder(BorderFactory.createTitledBorder(loweredetched, "Combo boxes"));
+        // Set up combo box 1
+        SizeSelect = new JComboBox(Sizes);
+        SizeSelect.setBounds(40, 25, 220, 25);
+        CoBoxSection.add(SizeSelect);
+        // Set up combo box 2
+        AmountSelect = new JComboBox(Amount);
+        AmountSelect.setBounds(40, 75, 220, 25);
+        CoBoxSection.add(AmountSelect);
+        // Set up size label
+        SizeLabel = new JLabel("Size: ");
+        SizeLabel.setBounds(280, 25, 220, 25);
+        CoBoxSection.add(SizeLabel);
+        // Set up amount label
+        AmountLabel = new JLabel("Amount: ");
+        AmountLabel.setBounds(280, 75, 220, 25);
+        CoBoxSection.add(AmountLabel);
+        // Set up combo box action listener 1
+        SizeSelect.addActionListener((ActionEvent e) -> {
+            int selection = SizeSelect.getSelectedIndex();
+            switch (selection) {
+                case 0:
+                    SizeLabel.setText("Size: Small");
+                    break;
+                case 1:
+                    SizeLabel.setText("Size: Medium");
+                    break;
+                case 2:
+                    SizeLabel.setText("Size: Large");
+                    break;
+                default:
+                    break;
+            }
+        });
+        // Set up combo box action listener 2
+        AmountSelect.addActionListener((ActionEvent e) -> {
+            int selection = AmountSelect.getSelectedIndex();
+            switch (selection) {
+                case 0:
+                    AmountLabel.setText("Amount: " + (selection + 1)); // This takes the array pos and adds 1, giving us the amount selected
+                    break;
+                case 1:
+                    AmountLabel.setText("Amount: " + (selection + 1));
+                    break;
+                case 2:
+                    AmountLabel.setText("Amount: " + (selection + 1));
+                    break;
+                case 3:
+                    AmountLabel.setText("Amount: " + (selection + 1));
+                    break;
+                case 4:
+                    AmountLabel.setText("Amount: " + (selection + 1));
+                    break;
+                case 5:
+                    AmountLabel.setText("Amount: " + (selection + 1));
+                    break;
+                case 6:
+                    AmountLabel.setText("Amount: " + (selection + 1));
+                    break;
+                case 7:
+                    AmountLabel.setText("Amount: " + (selection + 1));
+                    break;
+                case 8:
+                    AmountLabel.setText("Amount: " + (selection + 1));
+                    break;
+                case 9:
+                    AmountLabel.setText("Amount: " + (selection + 1));
+                    break;
+                default:
+                    break;
+            }
+        }); // yuck
+
+        // Set up check box container
+        CBoxSection = new JPanel();
+        CBoxSection.setLayout(null);
+        CBoxSection.setBounds(5, 470, 400, LbLSY);
+        CBoxSection.setBorder(BorderFactory.createTitledBorder(loweredetched, "Check boxes"));
+        // Set up checkbox 1
+        CheckS = new JCheckBox("Small");
+        CheckS.setBounds(40, 25, 220, 25);
+        CBoxSection.add(CheckS);
+        // Set up checkbox 2
+        CheckM = new JCheckBox("Medium");
+        CheckM.setBounds(40, 75, 220, 25);
+        CBoxSection.add(CheckM);
+        // Set up checkbox 3
+        CheckL = new JCheckBox("Large");
+        CheckL.setBounds(40, 125, 220, 25);
+        CBoxSection.add(CheckL);
+        // Set up checkbox Label
+        CheckLabel = new JLabel("Size: ");
+        CheckLabel.setBounds(280, 75, 220, 25);
+        CBoxSection.add(CheckLabel);
+        //Set up checkbox 1 ActionListener
+        CheckS.addActionListener((ActionEvent e) -> {
+            CheckLabel.setText("Size: Small");
+        });
+        //Set up checkbox 1 ActionListener
+        CheckM.addActionListener((ActionEvent e) -> {
+            CheckLabel.setText("Size: Medium");
+        });
+        //Set up checkbox 1 ActionListener
+        CheckL.addActionListener((ActionEvent e) -> {
+            CheckLabel.setText("Size: Large");
+        });
+        // Frame stuff 2
+        Frame2.add(RadBoxSection);
+        Frame2.add(CoBoxSection);
+        Frame2.add(CBoxSection);
+        Frame2.setSize(425, 750);
+        Frame2.setLayout(null);
+        Frame2.setVisible(true);
+    }
+
+    public static void main(String[] args) {
+        Frame1(args);
+        Frame2(args);
     } //EndOfMain
 
 } // EndOfClass
