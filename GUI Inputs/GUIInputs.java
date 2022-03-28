@@ -63,6 +63,7 @@ public class GUIInputs {
     public static JTextField AddressTextField;
     public static int AddressTextField1 = 0;
     public static JButton OrderButton;
+    public static JCheckBox ShipOrPickup;
 
     @SuppressWarnings({"unchecked", "rawtypes"})
     public static void GUI() {
@@ -216,7 +217,9 @@ public class GUIInputs {
         // Address text field
         AddressTextField = new JTextField("<Enter Address>");
         AddressTextField.setBounds(5, 115, 190, 25);
-
+        // Pick up in store or ship check box
+        ShipOrPickup = new JCheckBox("Pick up in store");
+        ShipOrPickup.setBounds(5, 140, 160, 15);
         // Order button
         OrderButton = new JButton("Order");
         OrderButton.setBounds(5, 675, 190, 25);
@@ -226,6 +229,7 @@ public class GUIInputs {
         ShippingInfoPanel.add(CityTextField);
         ShippingInfoPanel.add(AddressTextField);
         ShippingInfoPanel.add(OrderButton);
+        ShippingInfoPanel.add(ShipOrPickup);
         // Configure frame
         Frame.add(CustInfoPanel);
         Frame.add(PhotoInfoPanel);
@@ -370,10 +374,15 @@ public class GUIInputs {
                     System.out.println("Photo size: 4x6");
                     break;
             }
+            System.out.println("Shipping information:");
+            if (ShipOrPickup.isSelected() == false) {
             System.out.println("Country: " + CountryComboBox.getSelectedItem());
             System.out.println("Province: " + ProvinceComboBox.getSelectedItem());
             System.out.println("City: " + CityTextField.getText());
             System.out.println("Address: " + AddressTextField.getText());
+            } else {
+            System.out.println("Picking up in store");
+            }
             System.out.println("Number of photos: " + NumPrintsTextField.getText());
             System.out.println("Photo corrections");
             System.out.println("Red eye: " + RedEyeCheckBox.isSelected());
