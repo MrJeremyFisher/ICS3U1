@@ -63,7 +63,7 @@ public class GUIInputs {
     public static JTextField AddressTextField;
     public static int AddressTextField1 = 0;
     public static JButton OrderButton;
-    public static JCheckBox ShipOrPickup;
+    public static JCheckBox ShipOrPickupCheckBox;
     public static JButton ConfirmButton;
     public static JButton ResetButton;
 
@@ -220,8 +220,8 @@ public class GUIInputs {
         AddressTextField = new JTextField("<Enter Address>");
         AddressTextField.setBounds(5, 115, 190, 25);
         // Pick up in store or ship check box
-        ShipOrPickup = new JCheckBox("Pick up in store");
-        ShipOrPickup.setBounds(5, 140, 160, 15);
+        ShipOrPickupCheckBox = new JCheckBox("Pick up in store");
+        ShipOrPickupCheckBox.setBounds(5, 140, 160, 15);
         // Order button
         OrderButton = new JButton("Order");
         OrderButton.setBounds(5, 675, 190, 25);
@@ -239,6 +239,7 @@ public class GUIInputs {
         ShippingInfoPanel.add(OrderButton);
         ShippingInfoPanel.add(ConfirmButton);
         ShippingInfoPanel.add(ResetButton);
+        ShippingInfoPanel.add(ShipOrPickupCheckBox);
         // Configure frame
         Frame.add(CustInfoPanel);
         Frame.add(PhotoInfoPanel);
@@ -270,8 +271,8 @@ public class GUIInputs {
             ProvinceComboBox.setEnabled(false);
             CityTextField.setEnabled(false);
             AddressTextField.setEnabled(false);
-            ShipOrPickup.setEnabled(false);
-            ConfirmButton.setEnabled(false); 
+            ShipOrPickupCheckBox.setEnabled(false);
+            ConfirmButton.setEnabled(false);
 
         });
         // Disposes of frame and resets it by recalling all GUI methods
@@ -400,6 +401,21 @@ public class GUIInputs {
             }
         });
 
+        ShipOrPickupCheckBox.addActionListener((ActionEvent g) -> {
+            if (CountryComboBox.isEnabled()) {
+                CountryComboBox.setEnabled(false);
+                ProvinceComboBox.setEnabled(false);
+                CityTextField.setEnabled(false);
+                AddressTextField.setEnabled(false);
+            } else {
+                CountryComboBox.setEnabled(true);
+                ProvinceComboBox.setEnabled(true);
+                CityTextField.setEnabled(true);
+                AddressTextField.setEnabled(true);
+            }
+
+        });
+
         OrderButton.addActionListener((ActionEvent e) -> {
             System.out.println("Name: " + NameTextField.getText());
             System.out.println("Phone number: " + PhoneTextField.getText());
@@ -420,24 +436,23 @@ public class GUIInputs {
             }
 
             System.out.println("Shipping information:");
-            if (ShipOrPickup.isSelected() == false) {
+            
+            if (ShipOrPickupCheckBox.isSelected() == false) {
                 System.out.println("Country: " + CountryComboBox.getSelectedItem());
                 System.out.println("Province: " + ProvinceComboBox.getSelectedItem());
                 System.out.println("City: " + CityTextField.getText());
                 System.out.println("Address: " + AddressTextField.getText());
-            } else {
+            } else if (!CountryComboBox.isEnabled()){
                 System.out.println("Picking up in store");
             }
-            System.out.println("Number of photos: " + NumPrintsTextField.getText());
-            System.out.println("Photo corrections");
-            System.out.println("Red eye: " + RedEyeCheckBox.isSelected());
-            System.out.println("Over exposure: " + OverExposureCheckBox.isSelected());
-            System.out.println("Colour composure: " + ColourComposureCheckBox.isSelected());
-            System.out.println("Colour correction: " + ColourCorrectionCheckBox.isSelected());
-            System.out.println("Blemish retouch: " + BlemishRetouchCheckBox.isSelected());
-
-        }
-        );
+                System.out.println("Number of photos: " + NumPrintsTextField.getText());
+                System.out.println("Photo corrections");
+                System.out.println("Red eye: " + RedEyeCheckBox.isSelected());
+                System.out.println("Over exposure: " + OverExposureCheckBox.isSelected());
+                System.out.println("Colour composure: " + ColourComposureCheckBox.isSelected());
+                System.out.println("Colour correction: " + ColourCorrectionCheckBox.isSelected());
+                System.out.println("Blemish retouch: " + BlemishRetouchCheckBox.isSelected());
+            });
     } // EndOfGUI3
 
     public static void main(String[] args) {
