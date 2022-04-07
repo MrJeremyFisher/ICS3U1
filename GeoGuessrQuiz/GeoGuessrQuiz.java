@@ -1,20 +1,24 @@
 /*
  * Author: Jeremy Favro
- * Date: 
+ * Date:
  * Class: ICS3U1
- * Project name: 
- * Description: 
+ * Project name:
+ * Description:
  */
 package geoguessrquiz;
 
-import java.awt.event.ActionEvent;
+import javax.imageio.ImageIO;
 import javax.swing.*;
 import javax.swing.border.Border;
 import javax.swing.border.EtchedBorder;
 import java.awt.*;
+import java.awt.event.ActionEvent;
+import java.awt.image.BufferedImage;
+import java.io.File;
+import java.io.IOException;
 import java.util.Enumeration;
-import javax.swing.AbstractButton;
-import javax.swing.ButtonGroup;
+import java.util.Objects;
+
 
 public class GeoGuessrQuiz {
 
@@ -27,6 +31,8 @@ public class GeoGuessrQuiz {
     public static JFrame frm_quizFrame2;
     public static JFrame frm_quizFrame3;
     public static JFrame frm_quizFrame4;
+    public static JFrame frm_quizFrame5;
+    public static JFrame frm_scoreDisplay;
     public static int xSize = 800;
     public static int ySize = 600;
 
@@ -36,12 +42,24 @@ public class GeoGuessrQuiz {
     public static JPanel pnl_secondQuestion;
     public static JPanel pnl_thirdQuestion;
     public static JPanel pnl_fourthQuestion;
+    public static JPanel pnl_fifthQuestion;
+    public static JPanel pnl_scoreDisplay;
+    public static JPanel pnl_scoreAmount;
 
     // Global variables
     public static String userName;
     public static int userScore = 0;
-    public static boolean[] userScoreArray = new boolean[11];
+    public static boolean[] userScoreArray = new boolean[7];
     public static GridBagConstraints c = new GridBagConstraints();
+    public static int questionNumber = 0;
+    public static String Q1;
+    public static String Q2;
+    public static String Q2x;
+    public static String Q3;
+    public static String Q3x;
+    public static String Q4;
+    public static String Q5;
+    private static View View;
 
     // First frame
     public static JTextField txt_userName;
@@ -60,10 +78,6 @@ public class GeoGuessrQuiz {
     public static JCheckBox chk_checkAnswer1x;
     public static JCheckBox chk_checkAnswer2;
     public static JCheckBox chk_checkAnswer2x;
-    public static JCheckBox chk_checkAnswer3;
-    public static JCheckBox chk_checkAnswer3x;
-    public static JCheckBox chk_checkAnswer4;
-    public static JCheckBox chk_checkAnswer4x;
     public static JButton btn_answer2Submit;
     public static JLabel lbl_cityLabel;
     public static JLabel lbl_countryLabel;
@@ -84,10 +98,19 @@ public class GeoGuessrQuiz {
     public static JLabel lbl_citySelection;
     public static int selection = 0;
 
-    // Sixth frame
+    // Sixth frame (fifth question - text field)
     public static JTextField txt_locationTextBox;
-    
-    public static void firstFrame() {
+    public static JButton btn_answer5Submit;
+
+    // Score frame
+    public static JLabel lbl_question1;
+    public static JLabel lbl_question2;
+    public static JLabel lbl_question3;
+    public static JLabel lbl_question4;
+    public static JLabel lbl_question5;
+    public static JLabel lbl_finalScoreAmount;
+
+    public static void firstFrame() throws IOException {
 
         // First frame
         frm_nameFrame = new JFrame("GeoGuessr");
@@ -97,17 +120,24 @@ public class GeoGuessrQuiz {
         pnl_nameCollection = new JPanel();
         pnl_nameCollection.setLayout(new GridBagLayout()); // Center elements on this panel
         c.fill = GridBagConstraints.HORIZONTAL;
-        pnl_nameCollection.setBounds(25, 400, (xSize - 75), (ySize / 4));
+        pnl_nameCollection.setBounds(25, 25, (xSize - 75), (ySize - 75));
         pnl_nameCollection.setBorder(BorderFactory.createTitledBorder(loweredetched));
 
+        // Logo
+        BufferedImage GeoGuessrLogo = ImageIO.read(new File("src/GeoGuessrLogo.png"));
+        JLabel lbl_GeoGuessrLogo = new JLabel(new ImageIcon(GeoGuessrLogo));
+        c.gridx = 0;
+        c.gridy = 1;
+        c.gridwidth = 3;
+        pnl_nameCollection.add(lbl_GeoGuessrLogo, c);
         // User name input box
         txt_userName = new JTextField("< Enter Name >");
         txt_userName.setHorizontalAlignment(SwingConstants.CENTER);
         c.ipadx = 165;
         c.weightx = 0;
-        c.gridx = 1;
-        c.gridy = 0;
-        c.gridwidth = 3;
+        c.gridx = 2;
+        c.gridy = 2;
+        c.gridwidth = 1;
         pnl_nameCollection.add(txt_userName, c);
 
         // Start button
@@ -115,8 +145,8 @@ public class GeoGuessrQuiz {
         c.ipadx = 83;
         c.weightx = 0;
         c.gridx = 2;
-        c.gridy = 1;
-        c.gridwidth = 2;
+        c.gridy = 3;
+        c.gridwidth = 1;
         pnl_nameCollection.add(btn_start, c);
 
         // Start button action event
@@ -124,16 +154,17 @@ public class GeoGuessrQuiz {
             userName = txt_userName.getText();
             frm_nameFrame.dispose();
             secondFrame();
+            geoguessrquiz.View.main();
+            questionNumber = 1;
         });
 
-        // Add panels to frame
+        // Frame config
         frm_nameFrame.add(pnl_nameCollection);
-
-        // Configure frame
         frm_nameFrame.setSize(xSize, ySize);
+        frm_nameFrame.setResizable(false);
         frm_nameFrame.setLayout(null);
         frm_nameFrame.setVisible(true);
-    } // End of first frame
+    }
 
     public static void secondFrame() {
 
@@ -154,7 +185,7 @@ public class GeoGuessrQuiz {
         pnl_firstQuestion.setBorder(BorderFactory.createTitledBorder(loweredetched));
 
         // Radio button group
-        ButtonGroup radioButtonGroup1 = new ButtonGroup();
+        radioButtonGroup1 = new ButtonGroup();
 
         // Radio button 1
         rad_radioAnswer1 = new JRadioButton("Paris, France");
@@ -208,7 +239,7 @@ public class GeoGuessrQuiz {
         btn_answer1Submit.addActionListener((ActionEvent e) -> {
 
             // Get which button is selected and set truefalse in the answer array
-            for (Enumeration<AbstractButton> buttons = radioButtonGroup1.getElements(); buttons.hasMoreElements();) {
+            for (Enumeration<AbstractButton> buttons = radioButtonGroup1.getElements(); buttons.hasMoreElements(); ) {
 
                 AbstractButton button = buttons.nextElement();
 
@@ -228,12 +259,17 @@ public class GeoGuessrQuiz {
             // Dispose of current frame and create next
             frm_quizFrame1.dispose();
             thirdFrame();
+            geoguessrquiz.View.frame.dispose();
+            
+            questionNumber = 2;
+            geoguessrquiz.View.main();
 
         });
 
         // Configure frame
         frm_quizFrame1.add(pnl_firstQuestion);
         frm_quizFrame1.setSize(xSize, ySize);
+        frm_quizFrame1.setResizable(false);
         frm_quizFrame1.setLayout(null);
         frm_quizFrame1.setVisible(true);
     }
@@ -313,51 +349,23 @@ public class GeoGuessrQuiz {
 
         btn_answer2Submit.addActionListener((ActionEvent e) -> {
 
-            // Get which button is selected (in country section) and set truefalse in the answer array
-            for (Enumeration<AbstractButton> buttons = chk_buttonGroupCountry.getElements(); buttons.hasMoreElements();) {
+            userScoreArray[1] = chk_checkAnswer1.isSelected();
 
-                AbstractButton button = buttons.nextElement();
-
-                if (button.isSelected()) {
-
-                    String btntxt = button.getText();
-
-                    if (btntxt == "New York City") {
-                        userScoreArray[1] = true;
-
-                    } else {
-                        userScoreArray[1] = false;
-                    }
-                }
-            }
-
-            // Get which button is selected (in city section) and set truefalse in the answer array
-            for (Enumeration<AbstractButton> buttons = chk_buttonGroupCity.getElements(); buttons.hasMoreElements();) {
-
-                AbstractButton button = buttons.nextElement();
-
-                if (button.isSelected()) {
-
-                    String btntxt = button.getText();
-
-                    if (btntxt == "United States of America") {
-                        userScoreArray[2] = true;
-
-                    } else {
-                        userScoreArray[2] = false;
-                    }
-                }
-            }
+            userScoreArray[2] = chk_checkAnswer1x.isSelected();
 
             // Dispose of current frame and create next
             frm_quizFrame2.dispose();
             fourthFrame();
-
+            geoguessrquiz.View.frame.dispose();
+            
+            questionNumber = 3;
+            geoguessrquiz.View.main();
         });
 
         // Configure frame
         frm_quizFrame2.add(pnl_secondQuestion);
         frm_quizFrame2.setSize(xSize, ySize);
+        frm_quizFrame2.setResizable(false);
         frm_quizFrame2.setLayout(null);
         frm_quizFrame2.setVisible(true);
     }
@@ -417,11 +425,16 @@ public class GeoGuessrQuiz {
             }
             frm_quizFrame3.dispose();
             fifthFrame();
+            geoguessrquiz.View.frame.dispose();
+            
+            questionNumber = 4;
+            geoguessrquiz.View.main();
         });
 
         // Configure frame
         frm_quizFrame3.add(pnl_thirdQuestion);
         frm_quizFrame3.setSize(xSize, ySize);
+        frm_quizFrame3.setResizable(false);
         frm_quizFrame3.setLayout(null);
         frm_quizFrame3.setVisible(true);
     }
@@ -525,19 +538,24 @@ public class GeoGuessrQuiz {
             }
             frm_quizFrame4.dispose();
             sixthFrame();
+            geoguessrquiz.View.frame.dispose();
+            
+            questionNumber = 5;
+            geoguessrquiz.View.main();
         });
 
         // Configure frame
         frm_quizFrame4.add(pnl_fourthQuestion);
         frm_quizFrame4.setSize(xSize, ySize);
+        frm_quizFrame4.setResizable(false);
         frm_quizFrame4.setLayout(null);
         frm_quizFrame4.setVisible(true);
     }
 
     public static void sixthFrame() {
-        // Quiz frame 5 - buttons (North Korea)
-        frm_quizFrame4 = new JFrame("GeoGuessr: Question 4");
-        frm_quizFrame4.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+        // Quiz frame 5 - text field (North Korea)
+        frm_quizFrame5 = new JFrame("GeoGuessr: Question 5");
+        frm_quizFrame5.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         c.ipadx = 0;
         c.weightx = 0;
         c.gridx = 0;
@@ -545,24 +563,116 @@ public class GeoGuessrQuiz {
         c.gridwidth = 0;
 
         // Answer panel
-        pnl_fourthQuestion = new JPanel();
-        pnl_fourthQuestion.setLayout(new GridBagLayout()); // Center elements on this panel
+        pnl_fifthQuestion = new JPanel();
+        pnl_fifthQuestion.setLayout(new GridBagLayout()); // Center elements on this panel
         c.fill = GridBagConstraints.HORIZONTAL;
-        pnl_fourthQuestion.setBounds(25, 400, (xSize - 75), (ySize / 4));
-        pnl_fourthQuestion.setBorder(BorderFactory.createTitledBorder(loweredetched));
+        pnl_fifthQuestion.setBounds(25, 400, (xSize - 75), (ySize / 4));
+        pnl_fifthQuestion.setBorder(BorderFactory.createTitledBorder(loweredetched));
 
         // Textbox
-        
-        
+        txt_locationTextBox = new JTextField();
+        c.gridx = 0;
+        c.gridy = 0;
+        pnl_fifthQuestion.add(txt_locationTextBox, c);
+
+        // Submit button
+        btn_answer5Submit = new JButton("Submit");
+        c.gridx = 0;
+        c.gridy = 1;
+        pnl_fifthQuestion.add(btn_answer5Submit, c);
+
+        // Submit action event
+        btn_answer5Submit.addActionListener((ActionEvent e) -> {
+            userScoreArray[6] = Objects.equals(txt_locationTextBox.getText(), "North Korea"); // Minified if else
+            frm_quizFrame5.dispose();
+            seventhFrame();
+        });
+
         // Configure frame
-        frm_quizFrame4.add(pnl_fourthQuestion);
-        frm_quizFrame4.setSize(xSize, ySize);
-        frm_quizFrame4.setLayout(null);
-        frm_quizFrame4.setVisible(true);
+        frm_quizFrame5.add(pnl_fifthQuestion);
+        frm_quizFrame5.setSize(xSize, ySize);
+        frm_quizFrame5.setResizable(false);
+        frm_quizFrame5.setLayout(null);
+        frm_quizFrame5.setVisible(true);
     }
 
-    public static void main(String[] args) {
+    public static void seventhFrame() {
+        // Quiz frame 5 - buttons (North Korea)
+        frm_scoreDisplay = new JFrame("GeoGuessr: Question 5");
+        frm_scoreDisplay.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+        c.ipadx = 0;
+        c.weightx = 0;
+        c.gridx = 0;
+        c.gridy = 0;
+        c.gridwidth = 0;
+
+        // Score display panel
+        pnl_scoreDisplay = new JPanel();
+        pnl_scoreDisplay.setLayout(new GridBagLayout()); // Center elements on this panel
+        c.fill = GridBagConstraints.HORIZONTAL;
+        pnl_scoreDisplay.setBounds(25, 25, (xSize - 75), (ySize / 4));
+        pnl_scoreDisplay.setBorder(BorderFactory.createTitledBorder(loweredetched));
+
+        // Score display panel
+        pnl_scoreAmount = new JPanel();
+        pnl_scoreAmount.setLayout(new GridBagLayout()); // Center elements on this panel
+        c.fill = GridBagConstraints.HORIZONTAL;
+        pnl_scoreAmount.setBounds(25, 175, (xSize - 75), (ySize / 4));
+        pnl_scoreAmount.setBorder(BorderFactory.createTitledBorder(loweredetched));
+
+        // Question 1 right / wrong
+        lbl_question1 = new JLabel("You got question one: " + (Q1 = userScoreArray[0] ? "Correct!" : "Incorrect."));
+        c.gridx = 0;
+        c.gridy = 0;
+        c.gridwidth = 1;
+        pnl_scoreDisplay.add(lbl_question1, c);
+
+        // Question 2 right / wrong
+        lbl_question2 = new JLabel("You got question two part one: " + (Q2 = userScoreArray[1] ? "Correct!" : "Incorrect.") + " and you got part two: " + (Q2x = userScoreArray[2] ? "Correct!" : "Incorrect."));
+        c.gridx = 0;
+        c.gridy = 1;
+        pnl_scoreDisplay.add(lbl_question2, c);
+
+        // Question 3 right / wrong
+        lbl_question3 = new JLabel("You got question three part one: " + (Q3 = userScoreArray[3] ? "Correct!" : "Incorrect.") + " and you got part two: " + (Q3x = userScoreArray[4] ? "Correct!" : "Incorrect."));
+        c.gridx = 0;
+        c.gridy = 2;
+        pnl_scoreDisplay.add(lbl_question3, c);
+
+        // Question 4 right / wrong
+        lbl_question4 = new JLabel("You got question four: " + (Q4 = userScoreArray[5] ? "Correct!" : "Incorrect."));
+        c.gridx = 0;
+        c.gridy = 3;
+        pnl_scoreDisplay.add(lbl_question4, c);
+
+        // Question 5 right / wrong
+        lbl_question5 = new JLabel("You got question five: " + (Q5 = userScoreArray[6] ? "Correct!" : "Incorrect."));
+        c.gridx = 0;
+        c.gridy = 4;
+        pnl_scoreDisplay.add(lbl_question5, c);
+
+        // Final score amount
+        int finalScoreAmount = 0;
+        for (int i = 0; i <= 5; i ++) {
+            finalScoreAmount += userScoreArray[i] ? 1 : 0;
+        }
+        lbl_finalScoreAmount = new JLabel(userName + ", " + "Your final score is: " + finalScoreAmount + "/7");
+        pnl_scoreAmount.add(lbl_finalScoreAmount, c);
+
+        // Configure frame
+        frm_scoreDisplay.add(pnl_scoreDisplay);
+        frm_scoreDisplay.add(pnl_scoreAmount);
+        frm_scoreDisplay.setSize(xSize, ySize);
+        frm_scoreDisplay.setResizable(false);
+        frm_scoreDisplay.setLayout(null);
+        frm_scoreDisplay.setVisible(true);
+    }
+
+
+    public static void main(String[] args) throws IOException {
         firstFrame();
     } //End of main
 
+
 } // End of class
+
